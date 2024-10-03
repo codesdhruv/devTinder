@@ -2,24 +2,29 @@ const express = require("express");
 
 const app = express();
 
-app.get("/user", (req, res) => {
+app.get("/a(bc)?d", (req, res) => {
   res.send({ firstname: "Kunal", lastname: "kunal" });
 });
-app.post("/user", (req, res) => {
-  //databse logic
-  res.send("Data saved sucessfully in to the database");
+
+//? REGEX use
+app.get(/z/, (req, res) => {
+  res.send({ firstname: "Kunal", lastname: "kunal" });
 });
 
-app.delete("/user", (req, res) => {
-  res.send("Data deleted sucessfully!!");
+app.get(/.*fly$/, (req, res) => {
+  res.send({ firstname: "fly", lastname: "fly" });
 });
 
-//Note: any route starting with below one i.e. "/" will be override by this route handler
-//      so use it carefully
-//      this route will overide "/test" and "/home" route handlers
-// app.use() will handle all the HTTP request
-app.use("/", (req, res) => {
-  res.send("hello from dashboard");
+//? Reading Query params - localhost:7777/user?userid=202&password=testing
+app.get("/users", (req, res) => {
+  console.log(req.query);
+  res.send({ firstname: "Kunal", lastname: "kunal" });
+});
+
+//? making route dynamically - localhost:7777/user/700/Akshay/Testing
+app.get("/user/:userId/:name/:password", (req, res) => {
+  console.log(req.params);
+  res.send({ firstname: "Kunal", lastname: "kunal" });
 });
 
 app.listen(7777, () => {
