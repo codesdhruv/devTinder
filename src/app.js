@@ -2,33 +2,19 @@ const express = require("express");
 
 const app = express();
 
-const { adminAuth, userAuth } = require("./middleware/auth");
-
-//? Handle Auth middleware for all GET, POST, ... request
-// app.use("/admin", (req, res, next) => {
-//   const token = "xyz";
-//   const isAuthorized = token === "xyz";
-//   if (!isAuthorized) {
-//     res.status(401).send("unauthorized acess");
-//   } else {
-//     next();
-//   }
-// });
-
-//? Directly passing middleware
-app.get("/user", userAuth, (req, res) => {
-  res.send("authorized user");
+app.use("/user", (req, res) => {
+  // try {
+  throw new Error("generating error manually");
+  // } catch (error) {
+  //   res.status(500).send("something catch in catch-block");
+  // }
 });
 
-//? second way of passing middleware
-app.use("./admin", adminAuth);
-
-app.get("/admin/getAllData", (req, res) => {
-  res.send("authorized admin");
-});
-
-app.get("/admin/deleteAllData", (req, res) => {
-  res.send("authorized, data deleted !!");
+//? wildcart error handeling,  always use at last
+app.use("/", (err, req, res, next) => {
+  if (err) {
+    res.status(500).send("something went wrong contact support");
+  }
 });
 
 app.listen(7777, () => {
